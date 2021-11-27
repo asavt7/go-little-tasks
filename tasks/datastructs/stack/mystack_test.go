@@ -1,7 +1,7 @@
 package stack_test
 
 import (
-	"github.com/asavt7/go-little-tasks/tasks/stack"
+	"github.com/asavt7/go-little-tasks/tasks/datastructs/stack"
 	"testing"
 )
 
