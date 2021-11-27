@@ -151,4 +151,26 @@ func TestMyLinkedList(t *testing.T) {
 		}
 	})
 
+	t.Run("working with structs", func(t *testing.T) {
+		s := struct {
+			a string
+		}{a: "1"}
+
+		ll := linkedList.NewMyLinkedList()
+		ll.Add(s)
+		index := ll.Find(struct {
+			a string
+		}{a: "1"})
+		if index != 0 {
+			t.Errorf("Find() should return 0")
+		}
+
+		_ = ll.Delete(0)
+
+		size := ll.Size()
+		if size != 0 {
+			t.Errorf("size should be 0")
+		}
+	})
+
 }
