@@ -5,6 +5,7 @@ import (
 	"reflect"
 	"sort"
 	"strconv"
+	"strings"
 	"testing"
 )
 
@@ -48,4 +49,56 @@ func TestIntersection(t *testing.T) {
 		})
 	}
 
+}
+
+type A struct {
+	name string
+}
+
+func TestIntersectionInterface(t *testing.T) {
+	tt := []struct {
+		c1       []interface{}
+		c2       []interface{}
+		expected []interface{}
+	}{
+		{
+			c1:       []interface{}{A{name: "a"}},
+			c2:       []interface{}{A{name: "a"}},
+			expected: []interface{}{A{name: "a"}},
+		},
+		{
+			c1:       []interface{}{A{name: "a"}},
+			c2:       []interface{}{A{name: "b"}},
+			expected: []interface{}{},
+		},
+		{
+			c1:       []interface{}{A{name: "a"}},
+			c2:       []interface{}{A{name: "b"}, A{name: "a"}},
+			expected: []interface{}{A{name: "a"}},
+		},
+		{
+			c1:       []interface{}{A{name: "b"}, A{name: "a"}},
+			c2:       []interface{}{A{name: "b"}, A{name: "a"}},
+			expected: []interface{}{A{name: "a"}, A{name: "b"}},
+		},
+		{
+			c1:       []interface{}{A{name: "a"}, A{name: "b"}, A{name: "b"}},
+			c2:       []interface{}{A{name: "b"}, A{name: "a"}, A{name: "b"}},
+			expected: []interface{}{A{name: "a"}, A{name: "b"}, A{name: "b"}},
+		},
+	}
+
+	for i, s := range tt {
+		t.Run(strconv.Itoa(i), func(t *testing.T) {
+			inter := intersection.IntersectionInterface(s.c1, s.c2)
+
+			sort.Slice(inter, func(i, j int) bool {
+				return strings.Compare(inter[j].(A).name, inter[i].(A).name) > 0
+			})
+
+			if !reflect.DeepEqual(s.expected, inter) {
+				t.Errorf("not equal\nexpected : %v\nactual : %v", s.expected, inter)
+			}
+		})
+	}
 }
