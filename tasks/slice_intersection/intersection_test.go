@@ -102,3 +102,42 @@ func TestIntersectionInterface(t *testing.T) {
 		})
 	}
 }
+
+func TestIntersectionInterface_strings(t *testing.T) {
+	tt := []struct {
+		c1       []interface{}
+		c2       []interface{}
+		expected []interface{}
+	}{
+		{
+			c1:       []interface{}{"1"},
+			c2:       []interface{}{"1"},
+			expected: []interface{}{"1"},
+		},
+		{
+			c1:       []interface{}{"1", "1", "1", "1"},
+			c2:       []interface{}{"1", "1", "1"},
+			expected: []interface{}{"1", "1", "1"},
+		},
+		{
+			c1:       []interface{}{"1", "1", "1", "1", "2", "3"},
+			c2:       []interface{}{"1", "1", "1", "2", "3"},
+			expected: []interface{}{"1", "1", "1", "2", "3"},
+		},
+	}
+
+	for i, s := range tt {
+		t.Run(strconv.Itoa(i), func(t *testing.T) {
+			inter := intersection.IntersectionInterface(s.c1, s.c2)
+
+			sort.Slice(inter, func(i, j int) bool {
+				return strings.Compare(inter[j].(string), inter[i].(string)) > 0
+			})
+
+			if !reflect.DeepEqual(s.expected, inter) {
+				t.Errorf("not equal\nexpected : %v\nactual : %v", s.expected, inter)
+			}
+		})
+	}
+
+}
