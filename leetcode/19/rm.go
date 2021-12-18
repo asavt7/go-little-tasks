@@ -4,34 +4,40 @@ import (
 	"fmt"
 )
 
-/**
- * Definition for singly-linked list.
- * type ListNode struct {
- *     Val int
- *     Next *ListNode
- * }
- */
+// ListNode /**
 type ListNode struct {
 	Val  int
 	Next *ListNode
 }
 
 func removeNthFromEnd(head *ListNode, n int) *ListNode {
-	offset := 1
-
-	left, right := head, head
-
-	for offset < n+1 {
+	var sz int = 1
+	if head.Next == nil {
+		return nil
+	}
+	left, right := head, head.Next
+	for offset := 0; offset < n && right != nil; offset++ {
 		right = right.Next
-		offset++
+		sz++
 	}
 
-	for right.Next != nil {
+	for right != nil {
 		right = right.Next
 		left = left.Next
+		sz++
 	}
 
-	left.Next = left.Next.Next
+	if n == 1 {
+		if left == head && n == sz {
+			return head.Next
+		}
+		left.Next = nil
+	} else {
+		if left == head && n == sz {
+			return head.Next
+		}
+		left.Next = left.Next.Next
+	}
 
 	return head
 }
@@ -67,7 +73,9 @@ func (t *ListNode) String() string {
 
 func (t *ListNode) toSlice() []int {
 	var res []int
-
+	if t == nil {
+		return make([]int, 0, 0)
+	}
 	cur := t
 	for cur.Next != nil {
 		res = append(res, cur.Val)
