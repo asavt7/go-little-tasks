@@ -1,14 +1,6 @@
 package main
 
-import (
-	"fmt"
-)
-
-// ListNode /**
-type ListNode struct {
-	Val  int
-	Next *ListNode
-}
+import . "github.com/asavt7/go-little-tasks/leetcode/utils"
 
 func removeNthFromEnd(head *ListNode, n int) *ListNode {
 	var sz int = 1
@@ -40,47 +32,4 @@ func removeNthFromEnd(head *ListNode, n int) *ListNode {
 	}
 
 	return head
-}
-
-func generateNodes(in []int) *ListNode {
-
-	if len(in) == 0 {
-		return nil
-	}
-
-	first := &ListNode{
-		Val: in[0],
-	}
-	if len(in) == 1 {
-		return first
-	}
-
-	prev := first
-	for i := 1; i < len(in)-1; i++ {
-		cur := &ListNode{Val: in[i]}
-		prev.Next = cur
-		prev = cur
-	}
-	prev.Next = &ListNode{Val: in[len(in)-1]}
-
-	return first
-}
-
-func (t *ListNode) String() string {
-
-	return fmt.Sprintf("%+v", t.toSlice())
-}
-
-func (t *ListNode) toSlice() []int {
-	var res []int
-	if t == nil {
-		return make([]int, 0, 0)
-	}
-	cur := t
-	for cur.Next != nil {
-		res = append(res, cur.Val)
-		cur = cur.Next
-	}
-	res = append(res, cur.Val)
-	return res
 }

@@ -6,6 +6,10 @@ import (
 	"testing"
 )
 
+import (
+	. "github.com/asavt7/go-little-tasks/leetcode/utils"
+)
+
 // Test_removeNthFromEnd comment
 func Test_removeNthFromEnd(t *testing.T) {
 
@@ -43,10 +47,10 @@ func Test_removeNthFromEnd(t *testing.T) {
 
 	for _, s := range tt {
 		t.Run(fmt.Sprintf("%+v %d", s.in, s.n), func(t *testing.T) {
-			in := generateNodes(s.in)
+			in := GenerateNodes(s.in)
 			got := removeNthFromEnd(in, s.n)
 			exp := s.exp
-			if !reflect.DeepEqual(got.toSlice(), exp) {
+			if !reflect.DeepEqual(got.ToSlice(), exp) {
 				t.Errorf("failed! got %+v exp %+v", got, exp)
 			}
 
