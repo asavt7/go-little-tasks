@@ -39,5 +39,9 @@ func TestFixedWindowLimiter_AllowRequest_concurrent(t *testing.T) {
 	if r.AllowRequest() {
 		t.Error("should not allow rq")
 	}
+	time.Sleep(1100 * time.Millisecond)
+	if !r.AllowRequest() {
+		t.Error("should  allow rq")
+	}
 
 }

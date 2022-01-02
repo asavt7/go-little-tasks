@@ -2,21 +2,18 @@ package FixedWindow
 
 import (
 	"fmt"
-	"sync"
 	"sync/atomic"
 	"time"
 )
 
 type FixedWindowLimiter struct {
-	mu sync.Mutex
-
 	currentRqCount, maxRq int64
 	windowSize            time.Duration
 }
 
 func NewFixedWindowLimiter(maxRq int, windowSize time.Duration) *FixedWindowLimiter {
 	r := &FixedWindowLimiter{maxRq: int64(maxRq), windowSize: windowSize}
-
+	r.startUpdateWindowWorker()
 	return r
 }
 
