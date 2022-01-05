@@ -5,6 +5,8 @@ import (
 	"time"
 )
 
+var _ heap.Interface = (*Queue)(nil)
+
 type Queue []*CachedItem
 
 func (q Queue) Len() int {
