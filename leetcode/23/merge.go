@@ -1,8 +1,8 @@
 package merge
 
 import (
+	"container/heap"
 	"fmt"
-	"math"
 )
 
 type ListNode struct {
@@ -14,31 +14,60 @@ func Merge(lists []*ListNode) *ListNode {
 	return mergeKLists(lists)
 }
 
+type HeadOfNodes []*ListNode
+
+func (h *HeadOfNodes) Len() int {
+	return len(*h)
+}
+
+func (h *HeadOfNodes) Less(i, j int) bool {
+	return (*h)[i].Val < (*h)[j].Val
+}
+
+func (h *HeadOfNodes) Swap(i, j int) {
+	(*h)[i].Val, (*h)[j].Val = (*h)[j].Val, (*h)[i].Val
+}
+
+func (h *HeadOfNodes) Push(x interface{}) {
+	*h = append(*h, x.(*ListNode))
+}
+
+func (h *HeadOfNodes) Pop() interface{} {
+	old := *h
+	n := len(old)
+	x := old[n-1]
+	*h = old[0 : n-1]
+	return x
+}
+
 func mergeKLists(lists []*ListNode) *ListNode {
-	var head, cur *ListNode
+	if len(lists) == 0 {
+		return nil
+	}
+	if len(lists) == 1 {
+		return lists[0]
+	}
 
-	var curMin int = math.MaxInt64
-	//init step
-	for _, node := range lists {
-		if node.Val < curMin{
-			curMin = node.Val
+	h := make(HeadOfNodes, 0)
+
+	for _, list := range lists {
+		for list != nil {
+			heap.Push(&h, list)
+			list = list.Next
 		}
 	}
 
-	empties:= make([]int, 0,len(lists))
-	for len(lists)>0 {
-
-		for i, node := range lists {
-			if node == nil{
-				lists = append(lists[:i], lists[i+1:]...)
-				continue
-			}
-		}
-
-		empties = empties[:0]
-
-
+	if len(h) == 0 {
+		return nil
 	}
+
+	var head *ListNode = heap.Pop(&h).(*ListNode)
+	cur := head
+	for len(h) > 0 {
+		cur.Next = heap.Pop(&h).(*ListNode)
+		cur = cur.Next
+	}
+	cur.Next = nil
 
 	return head
 }
