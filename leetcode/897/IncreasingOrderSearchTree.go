@@ -12,15 +12,13 @@ func increasingBST(root *TreeNode) *TreeNode {
 
 	foo := func(root *TreeNode) {
 		if newRoot == nil {
-			newRoot = &TreeNode{
-				Val: root.Val,
-			}
+			newRoot = root
+			newRoot.Left = nil
 			cur = newRoot
 		} else {
-			cur.Right = &TreeNode{
-				Val: root.Val,
-			}
+			cur.Right = root
 			cur = cur.Right
+			cur.Left = nil
 		}
 	}
 	bst(root, foo)
