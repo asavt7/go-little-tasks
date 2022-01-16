@@ -18,7 +18,14 @@ func main() {
 		return cur + prev
 	}
 
-	s := []int{1, 1, 1, 2, 3, 4, 5}
+	s := []int{1, 1, 2, 3, 3, 7, 2, 4, 4, 5, 5}
 	res := Reduce(s, 0, sumFunc)
 	println(res)
+
+	xorFunc := func(prev, cur int) int {
+		return cur ^ prev
+	}
+	res = Reduce(s, 0, xorFunc)
+	println(res)
+
 }
